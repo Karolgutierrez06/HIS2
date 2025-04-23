@@ -40,7 +40,7 @@ document.getElementById('formSolicitudProcedimiento').addEventListener('submit',
   console.log('Datos de la solicitud:', serviceRequestData);
 
   // Enviar la solicitud al backend
-  fetch('https://hl7-fhir-ehr-karol-1.onrender.com/service-request/', {
+  fetch('https://hl7-fhir-ehr-karol.onrender.com/service-request/', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(serviceRequestData)
