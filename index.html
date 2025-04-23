@@ -6,12 +6,12 @@
   <title>Solicitud de Procedimiento Médico</title>
   <style>
     :root {
-      --primary-color: #1abc9c;
-      --secondary-color: #16a085;
-      --text-color: #2c3e50;
-      --background: #ecf0f1;
-      --border-color: #bdc3c7;
-      --danger-color: #e74c3c;
+      --primary-color: #a678d9;   /* Lila principal */
+      --secondary-color: #805ad5; /* Lila más intenso para hover */
+      --text-color: #1a1a1a;      /* Letras negras */
+      --background: #f9f8fd;      /* Fondo muy claro con matiz lila */
+      --border-color: #c9b6e4;    /* Borde suave lila */
+      --danger-color: #d6336c;
     }
 
     * {
@@ -37,7 +37,7 @@
       width: 100%;
       padding: 30px;
       border-radius: 10px;
-      box-shadow: 0 0 15px rgba(0,0,0,0.1);
+      box-shadow: 0 0 20px rgba(166, 120, 217, 0.1);
     }
 
     header {
@@ -63,7 +63,7 @@
     }
 
     fieldset {
-      border: 1px solid var(--border-color);
+      border: 2px solid var(--border-color);
       border-radius: 8px;
       padding: 20px;
       grid-column: span 1;
@@ -75,7 +75,7 @@
 
     legend {
       font-weight: bold;
-      color: var(--secondary-color);
+      color: var(--primary-color);
       font-size: 1.1em;
       padding: 0 8px;
     }
@@ -88,6 +88,7 @@
       display: block;
       margin-bottom: 6px;
       font-weight: 600;
+      color: var(--text-color);
     }
 
     .required-field::after {
@@ -97,13 +98,17 @@
 
     input[type="text"],
     input[type="date"],
+    input[type="number"],
+    input[type="time"],
     select,
     textarea {
       width: 100%;
       padding: 10px;
-      border: 1px solid var(--border-color);
-      border-radius: 4px;
+      border: 2px solid var(--border-color);
+      border-radius: 5px;
       font-size: 1em;
+      color: var(--text-color);
+      background-color: #fff;
     }
 
     textarea {
@@ -233,4 +238,5 @@
   <script src="app.js"></script>
 </body>
 </html>
+
 
