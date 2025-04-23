@@ -1,35 +1,45 @@
 document.getElementById('formSolicitudProcedimiento').addEventListener('submit', function(event) {
   event.preventDefault();
 
-  // Obtener los valores del formulario
-  const nombrePaciente    = document.getElementById('nombrePaciente').value;
-  const fechaConsulta     = document.getElementById('fechaConsulta').value;
-  const nombreMedico      = document.getElementById('nombreMedico').value;
-  const cedulaMedico      = document.getElementById('cedulaMedico').value;
-  const diagnostico       = document.getElementById('diagnostico').value;
-  const procedimiento     = document.getElementById('procedimiento').value;
-  const justificacion     = document.getElementById('justificacion').value;
-  const fechaOpcion1      = document.getElementById('fechaOpcion1').value;
-  const fechaOpcion2      = document.getElementById('fechaOpcion2').value;
-  const fechaOpcion3      = document.getElementById('fechaOpcion3').value;
+  // 1. DATOS PACIENTE
+  const nombrePaciente = document.getElementById('nombrePaciente').value;
+  const fechaConsulta = document.getElementById('fechaConsulta').value;
+
+  // 2. DATOS DEL MEDICO
+  const nombreMedico = document.getElementById('nombreMedico').value;
+  const cedulaMedico = document.getElementById('cedulaMedico').value;
+
+  // 3. DETALLES DEL PROCEDIMIENTO
+  const diagnostico = document.getElementById('diagnostico').value;
+  const procedimiento = document.getElementById('procedimiento').value;
+  const justificacion = document.getElementById('justificacion').value;
+  const fechaOpcion1 = document.getElementById('fechaOpcion1').value;
+  const fechaOpcion2 = document.getElementById('fechaOpcion2').value;
+  const fechaOpcion3 = document.getElementById('fechaOpcion3').value;
   const horarioPreferente = document.getElementById('horarioPreferente').value;
 
-  // Construir el objeto con los datos de la solicitud médica
+  // Construir el objeto con los datos organizados en apartados
   const serviceRequestData = {
-    paciente: nombrePaciente,
-    fechaConsulta: fechaConsulta,
-    medico: nombreMedico,
-    cedulaMedico: cedulaMedico,
-    diagnostico: diagnostico,
-    procedimiento: procedimiento,
-    justificacion: justificacion,
-    fechasDisponibles: [fechaOpcion1, fechaOpcion2, fechaOpcion3],
-    horarioPreferente: horarioPreferente
+    paciente: {
+      nombre: nombrePaciente,
+      fechaConsulta: fechaConsulta
+    },
+    medico: {
+      nombre: nombreMedico,
+      cedula: cedulaMedico
+    },
+    procedimiento: {
+      diagnostico: diagnostico,
+      procedimiento: procedimiento,
+      justificacion: justificacion,
+      fechasDisponibles: [fechaOpcion1, fechaOpcion2, fechaOpcion3],
+      horarioPreferente: horarioPreferente
+    }
   };
 
   console.log('Datos de la solicitud:', serviceRequestData);
 
-  // Enviar la solicitud al backend (con trailing slash)
+  // Enviar la solicitud al backend
   fetch('https://hl7-fhir-ehr-karol-1.onrender.com/service-request/', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
