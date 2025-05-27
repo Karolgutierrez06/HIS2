@@ -1,49 +1,51 @@
 document.getElementById('formSolicitudProcedimiento').addEventListener('submit', function(event) {
   event.preventDefault();
 
-  // 1. DATOS PACIENTE
-  const nombrePaciente = document.getElementById('nombrePaciente').value;
-  const fechaConsulta = document.getElementById('fechaConsulta').value;
+  // Obtener los valores del formulario
+  const idPaciente               = document.getElementById('idPaciente').value;
+  const nombrePaciente           = document.getElementById('nombrePaciente').value;
+  const generoPaciente           = document.getElementById('generoPaciente').value;
+  const nombreMedico             = document.getElementById('nombreMedico').value;
+  const cedulaMedico             = document.getElementById('cedulaMedico').value;
+  const codigoProcedimiento      = document.getElementById('codigoProcedimiento').value;
+  const descripcionProcedimiento = document.getElementById('descripcionProcedimiento').value;
+  const fechaSolicitud           = document.getElementById('fechaSolicitud').value;
+  const prioridad                = document.getElementById('prioridad').value;
 
-  // 2. DATOS DEL MEDICO
-  const nombreMedico = document.getElementById('nombreMedico').value;
-  const cedulaMedico = document.getElementById('cedulaMedico').value;
+  // Convertir fecha a ISO 8601 (formato estándar de FHIR)
+  const fechaISO = new Date(fechaSolicitud).toISOString();
 
-  // 3. DETALLES DEL PROCEDIMIENTO
-  const diagnostico = document.getElementById('diagnostico').value;
-  const procedimiento = document.getElementById('procedimiento').value;
-  const justificacion = document.getElementById('justificacion').value;
-  const fechaOpcion1 = document.getElementById('fechaOpcion1').value;
-  const fechaOpcion2 = document.getElementById('fechaOpcion2').value;
-  const fechaOpcion3 = document.getElementById('fechaOpcion3').value;
-  const horarioPreferente = document.getElementById('horarioPreferente').value;
-
-  // Construir el objeto con los datos organizados en apartados
-  const serviceRequestData = {
-    paciente: {
-      nombre: nombrePaciente,
-      fechaConsulta: fechaConsulta
+  // Construir recurso FHIR ServiceRequest
+  const fhirServiceRequest = {
+    resourceType: "ServiceRequest",
+    status: "active",
+    intent: "order",
+    priority: prioridad,
+    code: {
+      coding: [{
+        system: "http://example.org/procedures-codes", // Cambiar por un sistema real si es necesario
+        code: codigoProcedimiento,
+        display: descripcionProcedimiento
+      }]
     },
-    medico: {
-      nombre: nombreMedico,
-      cedula: cedulaMedico
+    subject: {
+      reference: "Patient/" + idPaciente,
+      display: nombrePaciente
     },
-    procedimiento: {
-      diagnostico: diagnostico,
-      procedimiento: procedimiento,
-      justificacion: justificacion,
-      fechasDisponibles: [fechaOpcion1, fechaOpcion2, fechaOpcion3],
-      horarioPreferente: horarioPreferente
+    authoredOn: fechaISO,
+    requester: {
+      reference: "Practitioner/" + cedulaMedico,
+      display: nombreMedico
     }
   };
 
-  console.log('Datos de la solicitud:', serviceRequestData);
+  console.log('FHIR ServiceRequest:', fhirServiceRequest);
 
-  // Enviar la solicitud al backend
-  fetch('https://hl7-fhir-ehr-karol.onrender.com/service-request/', {
+  // Enviar al backend
+  fetch('https://hl7-fhir-ehr-karol-1.onrender.com/service-request/', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(serviceRequestData)
+    body: JSON.stringify(fhirServiceRequest)
   })
   .then(response => {
     if (!response.ok) {
@@ -53,7 +55,7 @@ document.getElementById('formSolicitudProcedimiento').addEventListener('submit',
   })
   .then(data => {
     console.log('Success:', data);
-    alert('Solicitud de procedimiento creada exitosamente! ID: ' + data._id);
+    alert('Solicitud de procedimiento creada exitosamente. ID: ' + data.id);
   })
   .catch(error => {
     console.error('Error:', error);
